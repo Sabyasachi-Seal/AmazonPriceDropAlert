@@ -1,13 +1,10 @@
 import bs4
+import requests
 import urllib.request
 import csv
 from datetime import datetime
 import time
 import sendemail
-
-sender_email = input("Enter the Email from which you want to get notified: ")
-sender_password = input("Enter the password of the Email from which you want to get notified: ")
-receiver_email = input("Enter the email to which you want to get notified(can be the same as your sender email): ")
 
 def get_url():
     url = input("Enter the URL of the product: ")
@@ -32,9 +29,9 @@ def pricer(url):
     sauce = urllib.request.urlopen(url).read()
     soup = bs4.BeautifulSoup(sauce, "html.parser")
     try:
-        prices = float(soup.find(class_="a-offscreen").get_text().replace("₹", "").replace(",", ""))
+        price = float(soup.find(class_="a-offscreen").get_text().replace("₹", "").replace(",", ""))
     except AttributeError():
-        prices = float(soup.find(class_="a-price-whole").get_text().replace(",", "").replace(".", ""))
+        price = float(soup.find(class_="a-price-whole").get_text().replace(",", "").replace(".", ""))
     return price
 
 def price_alert(price):
@@ -42,6 +39,9 @@ def price_alert(price):
     sendemail.send_email(message, sender_email, sender_password, receiver_email)
 
 def compare(price):
+    sender_email = input("Enter the Email from which you want to get notified: ")
+    sender_password = input("Enter the password of the Email from which you want to get notified: ")
+    receiver_email = input("Enter the email to which you want to get notified(can be the same as your sender email): ")
     with open("prices.csv", "r") as price_file:
         reader = csv.reader(price_file)
         price_list = []
@@ -50,7 +50,7 @@ def compare(price):
         price_list = price_list[-2]
         old_price = price_list[-1]
         if int(old_price)>price:
-            price_alert(price)
+            price_alert(price, send_email, sender_password, receiver_email)
             return True
         return False
 
@@ -72,5 +72,8 @@ def main():
         if decrease == False:
             save_price(price_list)
         time.sleep(60*60*6)
+
+if __name__ == '__main__':
+    main()
 
 
