@@ -38,4 +38,12 @@ def price(url):
 
 def compare(price):
     with open("prices.csv", "r") as price_file:
-        print()
+        reader = csv.reader(price_file)
+        price_list = []
+        for row in reader:
+            price_list.append(row)
+        price_list = price_list[-2]
+        old_price = price_list[-1]
+        print(old_price)
+
+compare(100)
