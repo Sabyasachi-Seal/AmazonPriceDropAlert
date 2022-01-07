@@ -64,13 +64,16 @@ def initfile():
 
 def main():
     decrease = False
+    initialised = False
     while decrease==False:
-        initfile()
+        if count == False:
+            initfile()
         url = get_url()
         price = pricer(url)
         decrease = compare(price)
         if decrease == False:
             save_price(price)
+        count = True
         time.sleep(60*60*6)
 
 if __name__ == '__main__':
