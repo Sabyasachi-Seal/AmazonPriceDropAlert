@@ -2,10 +2,14 @@ import bs4
 import urllib.request
 import csv
 from datetime import datetime
+import time
 import sendemail
 
-# https://www.amazon.in/Xbox-Wireless-Controller-Robot-White/dp/B08K3GW17S
-def get_url(url):
+sender_email = input("Enter the Email from which you want to get notified: ")
+sender_password = input("Enter the password of the Email from which you want to get notified: ")
+receiver_email = input("Enter the email to which you want to get notified(can be the same as your sender email): ")
+
+def get_url():
     url = input("Enter the URL of the product: ")
     response = str(requests.get(url)).split(" ")
     while response[1] != "[200]>":
@@ -24,15 +28,14 @@ def save_price(price_list):
         writer.writerow(field)
         writer.writerows(data)
 
-def price(url):
+def pricer(url):
     sauce = urllib.request.urlopen(url).read()
     soup = bs4.BeautifulSoup(sauce, "html.parser")
     try:
         prices = float(soup.find(class_="a-offscreen").get_text().replace("₹", "").replace(",", ""))
     except AttributeError():
         prices = float(soup.find(class_="a-price-whole").get_text().replace(",", "").replace(".", ""))
-    cpmpare(price)
-    save_price(price)
+    return price
 
 def price_alert(price):
     message = f"The Price of the item you were looking for has now dropped to {price}"
@@ -46,8 +49,28 @@ def compare(price):
             price_list.append(row)
         price_list = price_list[-2]
         old_price = price_list[-1]
-        old_price_time = price_list[-2]
-        if old_price>price:
+        if int(old_price)>price:
             price_alert(price)
+            return True
+        return False
 
-compare(100)
+def initfile():
+    field = ['0', '0']
+    data = [['0', '0']]
+    with open("prices.csv", 'w') as price_file:
+        writer = csv.writer(price_file)
+        writer.writerow(field)
+        writer.writerows(data)
+
+def main():
+    decrease = False
+    while decrease==False:
+        initfile()
+        url = get_url()
+        price = pricer(url)
+        decrease = compare(price)
+        if decrease == False:
+            save_price(price_list)
+        time.sleep(60*60*6)
+
+
