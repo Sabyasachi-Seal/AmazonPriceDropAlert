@@ -1,10 +1,8 @@
 import bs4
-import requests
-import tkinter
-import os
 import urllib.request
 import csv
 from datetime import datetime
+import sendemail
 
 # https://www.amazon.in/Xbox-Wireless-Controller-Robot-White/dp/B08K3GW17S
 def get_url(url):
@@ -36,6 +34,10 @@ def price(url):
     cpmpare(price)
     save_price(price)
 
+def price_alert(price):
+    message = f"The Price of the item you were looking for has now dropped to {price}"
+    sendemail.send_email(message, sender_email, sender_password, receiver_email)
+
 def compare(price):
     with open("prices.csv", "r") as price_file:
         reader = csv.reader(price_file)
@@ -44,6 +46,8 @@ def compare(price):
             price_list.append(row)
         price_list = price_list[-2]
         old_price = price_list[-1]
-        print(old_price)
+        old_price_time = price_list[-2]
+        if old_price>price:
+            price_alert(price)
 
 compare(100)
