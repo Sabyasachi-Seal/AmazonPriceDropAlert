@@ -8,5 +8,8 @@ import urllib.request
 url = input("Enter the URL of the product: ")
 sauce = urllib.request.urlopen(url).read()
 soup = bs4.BeautifulSoup(sauce, "html.parser")
-prices = int(soup.find(class_="a-price-whole").get_text().replace(",", "").replace(".", ""))
+try:
+    prices = float(soup.find(class_="a-offscreen").get_text().replace("₹", "").replace(",", ""))
+except AttributeError():
+    prices = float(soup.find(class_="a-price-whole").get_text().replace(",", "").replace(".", ""))
 print(prices)
