@@ -70,7 +70,7 @@ def main():
         price = pricer(url)
         decrease = compare(price)
         if decrease == False:
-            save_price(price_list)
+            save_price(price)
         time.sleep(60*60*6)
 
 if __name__ == '__main__':
