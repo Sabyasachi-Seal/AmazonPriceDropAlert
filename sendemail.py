@@ -1,6 +1,5 @@
 import smtplib
 
-
 def send_email(message, sender_email, sender_password, receiver_email):
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
