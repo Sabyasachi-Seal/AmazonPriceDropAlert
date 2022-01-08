@@ -8,3 +8,12 @@
 
 ## Made Purely in 🐍
 
+<hr>
+
+## Packages Used
+- BeautifulSoup
+- Requests
+- UrlLib
+- CSV
+- Datetime
+- SmtpLib
