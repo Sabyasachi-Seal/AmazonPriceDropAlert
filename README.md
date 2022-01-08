@@ -2,7 +2,7 @@
 
 <hr>
 
-## This bot alerts you whenever there is a drop in the price of an item on Amazon
+## This bot emails you whenever there is a drop in the price of an item on Amazon
 
 <hr>
 
@@ -17,3 +17,10 @@
 - CSV
 - Datetime
 - SmtpLib
+
+<hr>
+
+## Prerequisites
+- bs4: <code>pip install bs4</code>
+- requests: <code>pip install requests</code>
+- An email with "Less Secure Apps" turned on, so that the app can send you an email.<br/>(I Suggest using a secondary email or maybe even creating a new one)
